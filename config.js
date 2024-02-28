@@ -1,0 +1,61 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const dbHost = process.env.DB_HOST || 'postgres';
+const dbUser = process.env.DB_USER || 'postgres';
+const dbPassword = process.env.DB_PASSWORD || 'postgres';
+const dbName = process.env.DB_NAME || 'timtransfer';
+const dbPort = process.env.DB_PORT || '5432';
+const dbDialect = process.env.DB_DIALECT || 'postgres';
+
+const disableHelmet = process.env.DISABLE_HELMET || false;
+
+const apiPort = process.env.API_PORT || 3000;
+const authAttemptsBeforeBlock = process.env.AUTH_ATTEMPTS_BEFORE_BLOCK || 5;
+const authBlockDurationInMinutes = process.env.AUTH_BLOCK_DURATION_MINUTES || 5;
+
+const secret = process.env.JWT_SECRET;
+const refreshSecret = process.env.JWT_REFRESH_SECRET;
+const expiresIn = '30d'
+
+const basePath = 'api';
+
+const config = {
+    swaggerOptions: {
+        swaggerDefinition: {
+            info: {
+                title: 'TimTransfer API',
+                description: 'API for TimTransfer',
+                contact: {
+                    name: 'Victor Girault',
+                    url: 'https://vgirault.me/',
+                    email: 'victor.girault536@gmail.com'
+                }
+            },
+            basePath: `/${basePath}`
+        },
+        apis: ['./routes/*.js']
+    },
+    db: {
+        host: dbHost,
+        user: dbUser,
+        password: dbPassword,
+        name: dbName,
+        port: dbPort,
+        dialect: dbDialect
+    },
+    api: {
+        port: apiPort,
+        basePath,
+        authAttemptsBeforeBlock: authAttemptsBeforeBlock,
+        authBlockDurationInMinutes: authBlockDurationInMinutes
+    },
+    jwt: {
+        secret,
+        refreshSecret,
+        expiresIn
+    }
+}
+
+export default config;

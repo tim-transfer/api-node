@@ -1,0 +1,39 @@
+version: "3.8"
+
+networks:
+  timtransfer:
+    driver: bridge
+
+volumes:
+  postgres: {}
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: timtransfer
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - timtransfer
+    restart: unless-stopped
+  api:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: timtransfer
+      DB_PORT: 5432
+      API_PORT: 3001
+      JWT_SECRET: XhZmCkkOJIRvxJJh6Vhgeg3F06DDrSQJ
+      JWT_REFRESH_SECRET: NqvYmJToyjT7Mo0XXM2bVUs4VdmgLu6f
+    ports:
+      - "3001:3001"
+    networks:
+      - timtransfer
+    restart: unless-stopped
