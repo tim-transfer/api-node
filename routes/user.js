@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import Controller from '../controllers/user.js';
 import passport from 'passport';
-import { restrict } from '../services/middleware.js';
 
 const router = Router();
 

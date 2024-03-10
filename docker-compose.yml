@@ -14,6 +14,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: timtransfer
+    ports: 
+      - "15432:5432"
     volumes:
       - postgres:/var/lib/postgresql/data
     networks:

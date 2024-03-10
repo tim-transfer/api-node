@@ -42,7 +42,7 @@ const controller = {
 
                 await user.save();
 
-                res.status(200).json({ result: true, token: `Bearer ${token}`, refreshToken: `Bearer ${user.refreshToken}`, error: '' });
+                res.status(200).json({ result: true,idUser: user.id, token: `Bearer ${token}`, refreshToken: `Bearer ${user.refreshToken}`, error: '' });
             } else {
                 if (user.consecutiveAuthFailedAttempts >= config.api.authAttemptsBeforeBlock) {
                     res.status(401).json({ result: false, error: 'Trop de tentatives' });

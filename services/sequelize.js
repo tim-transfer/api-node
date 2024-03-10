@@ -20,7 +20,7 @@ sequelize
     .authenticate()
     .then(() => {
         sequelize.sync({ alter: true });
-        logger.info('Connection has been established successfully.');
+        logger.info('Connection has been established successfully with DATABASE');
     })
     .catch(error => {
         logger.error('Unable to connect to the database:', error);
