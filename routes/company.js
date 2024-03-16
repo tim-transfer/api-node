@@ -6,4 +6,6 @@ const router = Router();
 
 router.post('/company',  passport.authenticate('jwt', { session: false }), controller.createCompany);
 
+router.get("/company", passport.authenticate("jwt", {session: false}), controller.getAll);
+
 export default router;

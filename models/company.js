@@ -21,10 +21,7 @@ const model = sequelize.define("company", {
   },
   userId: {
     type: Sequelize.BIGINT,
-    references: {
-        model: 'user', //model auquel est relié le user
-        key: 'id', //clé primaire du user
-     }
+    allowNull: false,
   },
 });
 
