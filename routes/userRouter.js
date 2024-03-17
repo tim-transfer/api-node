@@ -17,6 +17,12 @@ router.get(
   Controller.me
 );
 
+router.get(
+  "/user/:id",
+  passport.authenticate("jwt", { session: false }),
+  Controller.getOne
+);
+
 router.delete(
   "/user/:id",
   passport.authenticate("jwt", { session: false }),
@@ -25,7 +31,7 @@ router.delete(
 );
 
 router.put(
-  "/user",
+  "/user/:id",
   passport.authenticate("jwt", { session: false }),
   restrict("isAdmin"),
   Controller.update

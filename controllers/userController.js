@@ -24,11 +24,30 @@ const controller = {
     }
   },
 
-  getOne: async(req, res) => {
+  getOne: async (req, res) => {
     try {
+      const { id } = req.params;
 
-    }catch(error){
-      res.status(500).json({result: false, error: "impossible de récupérer les informations de l'utilisateur ayant pour id : "})
+      const user = await models.user.findOne({
+        where: { id },
+        attributes: [
+          "id",
+          "lastName",
+          "firstName",
+          "companyId",
+          "email",
+          "isAdmin",
+        ],
+      });
+
+      res.status(200).json({ result: user });
+    } catch (error) {
+      res.status(500).json({
+        result: false,
+        error:
+          "impossible de récupérer les informations de l'utilisateur ayant pour id : " +
+          id,
+      });
     }
   },
   me: async (req, res) => {
@@ -42,6 +61,9 @@ const controller = {
 
   update: async (req, res) => {
     try {
+
+      const { id } = req.params;
+
       const { email, lastName, firstName, companyId } = req.body;
 
       if (!email || !lastName || !firstName || !companyId) {
@@ -50,7 +72,7 @@ const controller = {
           .json({ result: "", error: "Adresse mail et mot de passe requis" });
       }
 
-      const existingUser = await models.user.findOne({ where: { email } });
+      const existingUser = await models.user.findOne({ where: { id } });
 
       await existingUser.update({
         email: email,
