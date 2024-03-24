@@ -66,9 +66,9 @@ const controller = {
 
     register: async (req, res) => {
         try {
-            const { email, password, lastName, firstName, companyId } = req.body;
+            const { email, password, lastName, firstName, companyId, isAdmin } = req.body;
 
-            if (!email || !password || !lastName || !firstName || !companyId) {
+            if (!email || !password || !lastName || !firstName || !companyId || !isAdmin) {
                 return res.status(400).json({ result: '', error: 'Adresse mail et mot de passe requis' });
             }
 
@@ -78,7 +78,7 @@ const controller = {
                 return res.status(400).json({ result: false, error: 'L\'adresse mail est déjà utilisée' });
             }
 
-            await models.user.create({ email, password, lastName, firstName, companyId });
+            await models.user.create({ email, password, lastName, firstName, companyId, isAdmin });
 
             res.status(200).json({ result: 'register', error: '' });
         } catch (error) {
