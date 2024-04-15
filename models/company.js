@@ -19,6 +19,16 @@ const model = sequelize.define("company", {
     allowNull: true,
     unique: false,
   },
+  siret: {
+    type: Sequelize.STRING,
+    allowNull: true,
+    unique: true
+  },
+  direct: {
+    type: Sequelize.STRING,
+    allowNull: true,
+    unique: false
+  },
   userId: {
     type: Sequelize.BIGINT,
     allowNull: false,
