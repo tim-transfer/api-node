@@ -8,6 +8,7 @@ const controller = {
     login: async (req, res) => {
         try {
             const { email, password } = req.body;
+            console.log(email, password)
 
             if (!email || !password) {
                 return res.status(400).json({ result: false, error: 'Adresse mail et mot de passe requis' });
@@ -27,7 +28,6 @@ const controller = {
             }
 
             const isPasswordCorrect = await bcrypt.comparePasswords(password, user.password);
-
             if (isPasswordCorrect) {
                 const payload = { id: user.id, email: user.email, password: user.password };
                 const token = jwt.sign(payload, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
