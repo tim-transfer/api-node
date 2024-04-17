@@ -26,7 +26,7 @@ const model = sequelize.define(
       type: Sequelize.INTEGER,
       allowNull: true,
       references: {
-        model: "company",
+        model: "companies",
         key: "id",
       },
     },
