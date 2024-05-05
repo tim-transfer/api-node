@@ -2,16 +2,16 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const dbHost = "localhost";
-const dbUser = "postgres";
-const dbPassword = "postgres";
-const dbName = "timtransfer";
-const dbPort = "15432";
-const dbDialect = "postgres";
+const dbHost = process.env.DB_HOST || "localhost";
+const dbUser = process.env.DB_USER || "postgres";
+const dbPassword = process.env.DB_PASSWORD || "postgres";
+const dbName = process.env.DB_NAME || "timtransfer";
+const dbPort = process.env.DB_PORT || "15432";
+const dbDialect = process.env.DB_DIALECT || "postgres";
 
 const disableHelmet = process.env.DISABLE_HELMET || false;
 
-const apiPort = 3001;
+const apiPort =  3001;
 const authAttemptsBeforeBlock = process.env.AUTH_ATTEMPTS_BEFORE_BLOCK || 5;
 const authBlockDurationInMinutes = process.env.AUTH_BLOCK_DURATION_MINUTES || 5;
 
