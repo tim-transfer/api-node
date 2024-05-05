@@ -25,10 +25,6 @@ const model = sequelize.define(
     companyId: {
       type: Sequelize.INTEGER,
       allowNull: true,
-      references: {
-        model: "companies",
-        key: "id",
-      },
     },
     email: {
       type: Sequelize.STRING,
@@ -38,11 +34,6 @@ const model = sequelize.define(
     password: {
       type: Sequelize.STRING,
       allowNull: false,
-    },
-    isAdmin: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
     },
     refreshToken: {
       type: Sequelize.TEXT,
@@ -57,6 +48,14 @@ const model = sequelize.define(
       type: Sequelize.DATE,
       allowNull: true,
     },
+    idRole: {
+      type: Sequelize.BIGINT,
+      allowNull: false,
+      references: {
+        model: "roles",
+        key: "id",
+      },
+    }
   },
   {
     hooks: {

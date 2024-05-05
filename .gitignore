@@ -134,7 +134,3 @@ dist
 
 # macOS
 .DS_Store
-
-
-# index js
-./config.js
