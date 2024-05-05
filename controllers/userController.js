@@ -10,7 +10,7 @@ const controller = {
           "firstName",
           "companyId",
           "email",
-          "isAdmin",
+          "idRole",
           "createdAt",
           "updatedAt",
           "deletedAt",
@@ -36,7 +36,7 @@ const controller = {
           "firstName",
           "companyId",
           "email",
-          "isAdmin",
+          "idRole",
         ],
       });
 
@@ -64,9 +64,9 @@ const controller = {
 
       const { id } = req.params;
 
-      const { email, lastName, firstName, companyId, isAdmin } = req.body;
+      const { email, lastName, firstName, companyId, idRole } = req.body;
 
-      if (!email || !lastName || !firstName || !companyId || !isAdmin) {
+      if (!email || !lastName || !firstName || !companyId || !idRole) {
         return res
           .status(400)
           .json({ result: "", error: "Adresse mail et mot de passe requis" });
@@ -79,7 +79,7 @@ const controller = {
         lastName,
         firstName,
         companyId,
-        isAdmin
+        idRole
       });
 
       await existingUser.save();
