@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import config from "../config.js";
 import * as bcrypt from "../utils/bcrypt.js";
 import sendMailToFirstConnection from "./../services/nodeMailer/sendMailer.js";
-import generateRandomPassword from "./../services/passwordGenerate.js"
+import generateRandomPassword from "./../services/passwordGenerate.js";
 import { default as handleError } from "../utils/error.js";
 
 const controller = {
@@ -13,23 +13,19 @@ const controller = {
       console.log(email, password);
 
       if (!email || !password) {
-        return res
-          .status(400)
-          .json({
-            result: false,
-            error: "Adresse mail et mot de passe requis",
-          });
+        return res.status(400).json({
+          result: false,
+          error: "Adresse mail et mot de passe requis",
+        });
       }
 
       const user = await models.user.findOne({ where: { email } });
 
       if (!user) {
-        return res
-          .status(404)
-          .json({
-            result: false,
-            error: "L'adresse mail ne correspond à aucun compte",
-          });
+        return res.status(404).json({
+          result: false,
+          error: "L'adresse mail ne correspond à aucun compte",
+        });
       }
 
       const blockEndTime = new Date(
@@ -45,15 +41,13 @@ const controller = {
           config.api.authAttemptsBeforeBlock &&
         blockEndTime > new Date()
       ) {
-        return res
-          .status(401)
-          .json({
-            result: false,
-            error: `${translations.tooManyAuthFail} ${utils.language.plural(
-              "minute",
-              remainingBlockTimeInMinutes
-            )}`,
-          });
+        return res.status(401).json({
+          result: false,
+          error: `${translations.tooManyAuthFail} ${utils.language.plural(
+            "minute",
+            remainingBlockTimeInMinutes
+          )}`,
+        });
       }
 
       const isPasswordCorrect = await bcrypt.comparePasswords(
@@ -80,15 +74,14 @@ const controller = {
 
         await user.save();
 
-        res
-          .status(200)
-          .json({
-            result: true,
-            idUser: user.id,
-            token: `Bearer ${token}`,
-            refreshToken: `Bearer ${user.refreshToken}`,
-            error: "",
-          });
+        res.status(200).json({
+          result: true,
+          idUser: user.id,
+          user: user,
+          token: `Bearer ${token}`,
+          refreshToken: `Bearer ${user.refreshToken}`,
+          error: "",
+        });
       } else {
         if (
           user.consecutiveAuthFailedAttempts >=
@@ -133,7 +126,7 @@ const controller = {
           .json({ result: false, error: "L'adresse mail est déjà utilisée" });
       }
 
-     const password = generateRandomPassword(10);
+      const password = generateRandomPassword(10);
 
       sendMailToFirstConnection(email, password);
 
@@ -193,14 +186,12 @@ const controller = {
             user.refreshToken = jwt.sign(payload, config.jwt.refreshSecret);
             await user.save();
 
-            res
-              .status(200)
-              .json({
-                result: true,
-                token: `Bearer ${token}`,
-                refreshToken: `Bearer ${user.refreshToken}`,
-                error: "",
-              });
+            res.status(200).json({
+              result: true,
+              token: `Bearer ${token}`,
+              refreshToken: `Bearer ${user.refreshToken}`,
+              error: "",
+            });
           }
         );
       }
