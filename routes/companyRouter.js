@@ -38,7 +38,7 @@ router.get(
 router.delete(
   "/company/:id",
   passport.authenticate("jwt", { session: false }),
-  restrict("isAdmin"),
+  restrict("1"),
   controller.delete
 );
 

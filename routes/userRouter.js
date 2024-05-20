@@ -26,14 +26,14 @@ router.get(
 router.delete(
   "/user/:id",
   passport.authenticate("jwt", { session: false }),
-  restrict("isAdmin"),
+  restrict("1"),
   Controller.delete
 );
 
 router.put(
   "/user/:id",
   passport.authenticate("jwt", { session: false }),
-  restrict("isAdmin"),
+  restrict("1"),
   Controller.update
 );
 
