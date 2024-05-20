@@ -29,7 +29,7 @@ const model = sequelize.define(
     email: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
     },
     password: {
       type: Sequelize.STRING,
@@ -47,6 +47,11 @@ const model = sequelize.define(
     lastAuthFailedAttempt: {
       type: Sequelize.DATE,
       allowNull: true,
+    },
+    isFirstConnection: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
     },
     idRole: {
       type: Sequelize.BIGINT,

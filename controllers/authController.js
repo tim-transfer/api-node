@@ -118,7 +118,9 @@ const controller = {
           .json({ result: "", error: "Adresse mail et mot de passe requis" });
       }
 
-      const existingUser = await models.user.findOne({ where: { email } });
+      const existingUser = await models.user.findOne({
+        where: { email, deletedAt: null },
+      });
 
       if (existingUser) {
         return res

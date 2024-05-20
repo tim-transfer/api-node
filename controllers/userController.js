@@ -61,7 +61,6 @@ const controller = {
 
   update: async (req, res) => {
     try {
-
       const { id } = req.params;
 
       const { email, lastName, firstName, companyId, idRole } = req.body;
@@ -79,7 +78,7 @@ const controller = {
         lastName,
         firstName,
         companyId,
-        idRole
+        idRole,
       });
 
       await existingUser.save();
@@ -124,6 +123,38 @@ const controller = {
         result: false,
         error:
           "Erreur lors de la suppression de l'utilisateur ayant pour id : " +
+          id,
+      });
+    }
+  },
+
+  changePassword: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const { password } = req.body;
+
+      const newId = Number(id);
+
+      const user = await models.user.findOne({
+        where: { id: newId },
+      });
+
+      user.password = password;
+      user.isFirstConnection = false;
+
+      const result = await user.save();
+
+      res.status(200).json({
+        result: result,
+        message: "Utilisateur modifié avec succès.",
+        error: "",
+      });
+    } catch (error) {
+      res.status(500).json({
+        result: false,
+        error:
+          "Erreur lors du changement de mot de passe avec l'utilisateur ayant pour id : " +
           id,
       });
     }
