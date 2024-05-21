@@ -63,7 +63,7 @@ const controller = {
     try {
       const { id } = req.params;
 
-      const { email, lastName, firstName, companyId, idRole } = req.body;
+      const { email, lastName, firstName, companyId, idRole} = req.body;
 
       if (!email || !lastName || !firstName || !companyId || !idRole) {
         return res
