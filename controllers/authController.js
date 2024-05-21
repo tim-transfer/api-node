@@ -110,7 +110,8 @@ const controller = {
 
   register: async (req, res) => {
     try {
-      const { email, lastName, firstName, companyId, idRole } = req.body;
+      const { email, lastName, firstName, companyId, idRole, isPostman } =
+        req.body;
 
       if (!email || !lastName || !firstName || !companyId || !idRole) {
         return res
@@ -128,17 +129,21 @@ const controller = {
           .json({ result: false, error: "L'adresse mail est déjà utilisée" });
       }
 
-      const password = generateRandomPassword(10);
+      let passwordToEnter = password;
+
+      if (isPostman) {
+        passwordToEnter = generateRandomPassword(10);
+      }
 
       sendMailToFirstConnection(email, password);
 
       await models.user.create({
-        email,
-        password,
-        lastName,
-        firstName,
-        companyId,
-        idRole,
+        email: email,
+        password: passwordToEnter,
+        lastName: lastName,
+        firstName: firstName,
+        companyId: companyId,
+        idRole: idRole,
       });
 
       res.status(200).json({ result: "register", error: "" });
