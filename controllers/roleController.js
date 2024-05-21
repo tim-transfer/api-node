@@ -8,7 +8,7 @@ const controller = {
       if (!libelle || !posterLibelle) {
         return res.status(400).json({
           message:
-            "Veuillez fournir les informations nécessaires concernant la création de rôle.",
+            "Veuillez fournir les informations nécessaires concernant la création de rôle. test accès github",
         });
       }
 
