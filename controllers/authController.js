@@ -110,7 +110,7 @@ const controller = {
 
   register: async (req, res) => {
     try {
-      const { email, lastName, firstName, companyId, idRole, isPostman } =
+      const { email, lastName, firstName, companyId, idRole, isPostman, password } =
         req.body;
 
       if (!email || !lastName || !firstName || !companyId || !idRole) {
@@ -131,11 +131,11 @@ const controller = {
 
       let passwordToEnter = password;
 
-      if (isPostman) {
+      if (!isPostman) {
         passwordToEnter = generateRandomPassword(10);
       }
 
-      sendMailToFirstConnection(email, password);
+      sendMailToFirstConnection(email, passwordToEnter);
 
       await models.user.create({
         email: email,
