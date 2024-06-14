@@ -63,7 +63,7 @@ const controller = {
     try {
       const { id } = req.params;
 
-      const { email, lastName, firstName, companyId, idRole} = req.body;
+      const { email, lastName, firstName, companyId, idRole } = req.body;
 
       if (!email || !lastName || !firstName || !companyId || !idRole) {
         return res
@@ -132,16 +132,16 @@ const controller = {
     try {
       const { id } = req.params;
 
-      const { password } = req.body;
-
       const newId = Number(id);
+
+      const newPassword = req.body.user.password;
 
       const user = await models.user.findOne({
         where: { id: newId },
       });
 
-      user.password = password;
       user.isFirstConnection = false;
+      user.password = newPassword;
 
       const result = await user.save();
 

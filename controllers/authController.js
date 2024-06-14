@@ -110,7 +110,7 @@ const controller = {
 
   register: async (req, res) => {
     try {
-      const { email, lastName, firstName, companyId, idRole, isPostman } =
+      const { email, lastName, firstName, companyId, idRole, isPostman, password } =
         req.body;
 
       if (!email || !lastName || !firstName || !companyId || !idRole) {
