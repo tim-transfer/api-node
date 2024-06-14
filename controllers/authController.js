@@ -129,13 +129,13 @@ const controller = {
           .json({ result: false, error: "L'adresse mail est déjà utilisée" });
       }
 
-      let passwordToEnter = password;
+      let passwordToEnter = "";
 
-      if (isPostman) {
+      if (!isPostman) {
         passwordToEnter = generateRandomPassword(10);
       }
 
-      sendMailToFirstConnection(email, password);
+      sendMailToFirstConnection(email, passwordToEnter);
 
       await models.user.create({
         email: email,
