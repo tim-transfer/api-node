@@ -2,10 +2,12 @@ import auth from "./auth.js";
 import user from "./userRouter.js";
 import company from "./companyRouter.js";
 import role from "./roleRouter.js";
+import document from "./documentRouter.js";
 
 export default {
-  auth,
-  user,
-  company,
-  role,
+    auth,
+    user,
+    company,
+    document,
+    role,
 };

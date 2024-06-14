@@ -9,7 +9,8 @@ module.exports = {
       password: 'password',
       email: 'kevinquiercelin@numidev.fr',
       isAdmin: true,
-      companyId: 1 
+      companyId: 1,
+      createdAt: new Date()
     }]);
   },
 
