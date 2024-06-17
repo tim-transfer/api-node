@@ -12,7 +12,9 @@ const checkSignatureLink = async (req, res, next) => {
         if (link.used) {
             return res.status(400).send({ message: 'Link already used' });
         }
-        const document = await Document.getDocumentById(link.documentId);
+        const id = link.documentId;
+        const document = await Document.findOne({where:{ id }});
+        console.log(document)
         if (!document) {
             return res.status(404).send({ message: 'Document not found' });
         }

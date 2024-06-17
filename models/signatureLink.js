@@ -11,7 +11,7 @@ const model = sequelize.define('signatureLink', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Document', 
+            model: 'documents', 
             key: 'id'
         }
     },
