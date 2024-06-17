@@ -1,4 +1,5 @@
 import models from "../models/index.js";
+import fileLogger from "../services/fileLogger.js";
 
 const controller = {
   createCompany: async (req, res) => {
@@ -21,6 +22,7 @@ const controller = {
 
       res.status(201).json(savedCompany);
     } catch (error) {
+      fileLogger.error(error);
       res.status(500).json({
         result: false,
         message: "Erreur, impossible d'enregistrer une nouvelle company.",
@@ -63,6 +65,7 @@ const controller = {
           "L'entreprise ayant pour id : " + id + " a bien été mis à jour.",
       });
     } catch (error) {
+      fileLogger.error(error);
       res.status(500).json({
         result: false,
         error:
@@ -80,6 +83,7 @@ const controller = {
       );
       return res.status(200).json({ result: plainCompanies });
     } catch (error) {
+      fileLogger.error(error);
       return res.status(500).json({
         result: false,
         error:
@@ -98,6 +102,7 @@ const controller = {
       });
       return res.status(200).json({ result: company });
     } catch (error) {
+      fileLogger.error(error);
       return res.status(500).json({
         result: false,
         error:
@@ -116,6 +121,7 @@ const controller = {
 
       return res.status(200).json({ result: company });
     } catch (error) {
+      fileLogger.error(error);
       return res.status(500).json({
         result: false,
         error:
@@ -147,6 +153,7 @@ const controller = {
         });
       }
     } catch (error) {
+      fileLogger.error(error);
       res.status(500).json({
         result: false,
         error:

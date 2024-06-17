@@ -1,4 +1,5 @@
 import models from "../models/index.js";
+import fileLogger from "../services/fileLogger.js";
 
 const controller = {
   getAll: async (req, res) => {
@@ -42,6 +43,7 @@ const controller = {
 
       res.status(200).json({ result: user });
     } catch (error) {
+      fileLogger.error(error);
       res.status(500).json({
         result: false,
         error:
@@ -55,6 +57,7 @@ const controller = {
       const user = await models.user.findOne({ where: { id: req.user.id } });
       res.status(200).json({ result: user, error: "" });
     } catch (error) {
+      fileLogger.error(error);
       res.status(500).json({ result: false, error: "Erreur interne" });
     }
   },
@@ -88,6 +91,7 @@ const controller = {
           "L'utilisateur : " + existingUser.email + " a bien été enregistrer.",
       });
     } catch (error) {
+      fileLogger.error(error);
       res.status(500).json({
         result: false,
         error:
@@ -119,6 +123,7 @@ const controller = {
         });
       }
     } catch (error) {
+      fileLogger.error(error);
       res.status(500).json({
         result: false,
         error:
@@ -151,6 +156,7 @@ const controller = {
         error: "",
       });
     } catch (error) {
+      fileLogger.error(error);
       res.status(500).json({
         result: false,
         error:

@@ -5,6 +5,7 @@ import * as bcrypt from "../utils/bcrypt.js";
 import sendMailToFirstConnection from "./../services/nodeMailer/sendMailer.js";
 import generateRandomPassword from "./../services/passwordGenerate.js";
 import { default as handleError } from "../utils/error.js";
+import fileLogger from "../services/fileLogger.js";
 
 const controller = {
   login: async (req, res) => {
@@ -104,6 +105,7 @@ const controller = {
         }
       }
     } catch (error) {
+      fileLogger.error(error);
       handleError(error, res);
     }
   },
@@ -148,6 +150,7 @@ const controller = {
 
       res.status(200).json({ result: "register", error: "" });
     } catch (error) {
+      fileLogger.error(error);
       handleError(error, res);
     }
   },
@@ -203,6 +206,7 @@ const controller = {
         );
       }
     } catch (error) {
+      fileLogger.error(error);
       handleError(error, res);
     }
   },

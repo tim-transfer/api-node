@@ -18,6 +18,14 @@ const model = sequelize.define("document", {
     type: Sequelize.STRING,
     allowNull: false
   },
+  projectId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+        model: 'projects', 
+        key: 'id'
+    }
+},
   // Ajoutez d'autres champs comme nécessaire
 });
 

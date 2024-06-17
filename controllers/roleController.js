@@ -1,4 +1,5 @@
 import models from "../models/index.js";
+import fileLogger from "../services/fileLogger.js";
 
 const controller = {
   createRole: async (req, res) => {
@@ -19,6 +20,7 @@ const controller = {
 
       res.status(201).json(savedRole);
     } catch (error) {
+      fileLogger.error(error);
       res.status(500).json({
         result: false,
         message: "Erreur, impossible d'enregistrer le rôle suivant : " + posterLibelle,
@@ -34,6 +36,7 @@ const controller = {
         .status(200)
         .json({ result: roles, message: "Entreprise récupéré avec succès." });
     } catch (error) {
+      fileLogger.error(error);
       res.status(404).json({
         result: false,
         error: `Erreur lors de la récupération des rôles, contactez m'administrateur.`,

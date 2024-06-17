@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import SignatureLink from '../models/signatureLink.js';
+import fileLogger from '../services/fileLogger.js';
 
 const generateSignatureLink = async (req, res) => {
     const { documentId } = req.body;
@@ -11,6 +12,7 @@ const generateSignatureLink = async (req, res) => {
         });
         res.status(200).send({ link: `/access/${token}` });
     } catch (err) {
+        fileLogger.error(err);
         res.status(500).send({ message: 'Server error', error: err.message });
     }
 };

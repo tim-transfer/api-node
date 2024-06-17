@@ -2,13 +2,14 @@ import Document from "../models/document.js";
 import crypto from 'crypto';
 import path from 'path';
 import fs from 'fs';
+import fileLogger from "../services/fileLogger.js";
 // Fonction pour créer un document
 // Fonction pour créer un document en cryptant le contenu
 const controller = {
 
 createDocument: async (req, res) => {
     try {
-      const { content, name, type } = req.body;  
+      const { content, name, type, projectId } = req.body;  
       const iv = crypto.randomBytes(16);
       // Génération d'un vecteur d'initialisation (IV) de 16 octets
       const cipher = crypto.createCipheriv('aes-256-cbc', process.env.ENCRYPTION_KEY, iv);
@@ -31,6 +32,7 @@ createDocument: async (req, res) => {
         path: filePath,
         type:type,
         iv: iv.toString('hex'),
+        projectId: projectId
       });
       res.status(201).json(newDocument);
     } catch (error) {
@@ -44,7 +46,7 @@ getAllDocuments: async (req, res) => {
     const documents = await Document.findAll();
     res.json(documents);
   } catch (error) {
-    console.error(error);
+    fileLogger.error(error);
     res.status(500).json({ message: 'Erreur lors de la récupération des documents' });
   }
 },
@@ -75,8 +77,8 @@ getDocumentById: async (req, res) => {
       // Envoyer le fichier déchiffré en base64
       res.send(decryptedContent);
       } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Erreur lors de la récupération du document' });
+        fileLogger.error(error);
+        res.status(500).json({ message: 'Erreur lors de la récupération du document' });
     }
   },
 // Fonction pour mettre à jour un document
@@ -95,7 +97,7 @@ updateDocument: async (req, res) => {
     });
     res.json(document);
   } catch (error) {
-    console.error(error);
+    fileLogger.error(error);
     res.status(500).json({ message: 'Erreur lors de la mise à jour du document' });
   }
 },
