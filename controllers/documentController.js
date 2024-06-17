@@ -1,27 +1,41 @@
 import Document from "../models/document.js";
 import crypto from 'crypto';
+import path from 'path';
+import fs from 'fs';
 // Fonction pour créer un document
 // Fonction pour créer un document en cryptant le contenu
 const controller = {
 
 createDocument: async (req, res) => {
     try {
-      const { title, content } = req.body;
-      
-      // Cryptage du contenu
-      const cipher = crypto.createCipher('aes-256-cbc', process.env.ENCRYPTION_KEY);
-      let encryptedContent = cipher.update(content, 'utf8', 'hex');
-      encryptedContent += cipher.final('hex');
+      const { content, name, type } = req.body;  
+      const iv = crypto.randomBytes(16);
+      // Génération d'un vecteur d'initialisation (IV) de 16 octets
+      const cipher = crypto.createCipheriv('aes-256-cbc', process.env.ENCRYPTION_KEY, iv);
+      const buffer = Buffer.from(content, 'base64');
+
+      let encryptedContent = Buffer.concat([cipher.update(buffer), cipher.final()]);
+  
+      // Chemin du dossier où vous souhaitez enregistrer le fichier
+      const uploadDir = path.join('uploads');
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir);
+      }
+  
+      // Chemin complet du fichier à enregistrer
+      const filePath = path.join(uploadDir, `${Date.now()}-${name}`);
+      fs.writeFileSync(filePath, encryptedContent);
   
       const newDocument = await Document.create({
-        title,
-        content: encryptedContent
-        // Ajoutez d'autres champs si nécessaire
+        name: name,
+        path: filePath,
+        type:type,
+        iv: iv.toString('hex'),
       });
       res.status(201).json(newDocument);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Erreur lors de la création du document' });
+      res.status(500).json({ message: error });
     }
   },
 // Fonction pour récupérer tous les documents
@@ -38,19 +52,29 @@ getAllDocuments: async (req, res) => {
 getDocumentById: async (req, res) => {
     const { id } = req.params;
     try {
-      const document = await Document.findByPk(id);
+      const document = await Document.findOne({ where: { id } });
       if (!document) {
         return res.status(404).json({ message: 'Document non trouvé' });
       }
+      const filePath = path.join(document.path);
+
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ message: 'Document non trouvé' });
+      }
+      const iv = Buffer.from(document.iv, 'hex');
+
+      const encryptedContent = fs.readFileSync(filePath);
+      const decipher = crypto.createDecipheriv('aes-256-cbc', process.env.ENCRYPTION_KEY, iv);
   
-      // Décryptage du contenu
-      const decipher = crypto.createDecipher('aes-256-cbc', process.env.ENCRYPTION_KEY);
-      let decryptedContent = decipher.update(document.content, 'hex', 'utf8');
-      decryptedContent += decipher.final('utf8');
-  
-      // Retourne le document avec le contenu décrypté
-      res.json({ ...document.toJSON(), content: decryptedContent });
-    } catch (error) {
+      let decryptedContent = Buffer.concat([
+        decipher.update(encryptedContent),
+      ]);
+      res.setHeader('Content-Disposition', `attachment; filename="${document.name}"`);
+      res.setHeader('Content-Type', document.type == 'png' ? 'image/png' : 'application/pdf'); // Changez le type MIME en fonction de votre fichier
+
+      // Envoyer le fichier déchiffré en base64
+      res.send(decryptedContent);
+      } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Erreur lors de la récupération du document' });
     }
