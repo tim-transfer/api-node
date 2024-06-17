@@ -19,7 +19,7 @@ const model = sequelize.define("document", {
     allowNull: false
   },
   projectId: {
-    type: DataTypes.INTEGER,
+    type: Sequelize.INTEGER,
     allowNull: false,
     references: {
         model: 'projects', 
