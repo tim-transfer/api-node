@@ -21,7 +21,7 @@ const controller = {
       ) {
         return res.status(400).json({
           message:
-            "Veuillez fournir toutes les informations nécessaire pour la création d'un plan de fichier.",
+            "Veuillez fournir toutes les informations nécessaires pour la création d'un plan de fichier.",
         });
       }
 

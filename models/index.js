@@ -4,6 +4,7 @@ import role from "./role.js";
 import document from "./document.js";
 import signatureLink from "./signatureLink.js";
 import fileInformation from "./fileInformation.js";
+import project from "./project.js";
 
 export default {
     user,
@@ -11,5 +12,6 @@ export default {
     role,
     document,
     signatureLink,
-    fileInformation
+    fileInformation,
+    project
 };
