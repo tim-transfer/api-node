@@ -3,6 +3,7 @@ import user from "./userRouter.js";
 import company from "./companyRouter.js";
 import role from "./roleRouter.js";
 import document from "./documentRouter.js";
+import fileInformations from "./fileInformationsRouter.js"
 
 export default {
     auth,
@@ -10,4 +11,5 @@ export default {
     company,
     document,
     role,
+    fileInformations
 };
