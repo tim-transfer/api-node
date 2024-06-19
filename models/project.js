@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+import sequelize from "../services/sequelize.js";
 
 const model = sequelize.define("project", {
   id: {
@@ -15,6 +16,16 @@ const model = sequelize.define("project", {
   },
   isActive: {
     type: Sequelize.BOOLEAN,
+    allowNull: false,
+    unique: false,
+  },
+  startingDate: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    unique: false,
+  },
+  endingDate: {
+    type: Sequelize.DATE,
     allowNull: false,
     unique: false,
   },

@@ -7,6 +7,7 @@ const controller = {
         isActive,
         position,
         companyId,
+        projectId,
         dateButoire,
         extensionFile,
       } = req.body;
@@ -17,7 +18,8 @@ const controller = {
         !position ||
         !companyId ||
         !dateButoire ||
-        !extensionFile
+        !extensionFile ||
+        !projectId
       ) {
         return res.status(400).json({
           message:
@@ -32,6 +34,7 @@ const controller = {
         companyId: Number(companyId),
         dateLimit: new Date(dateButoire),
         extensionFile: extensionFile,
+        projectId: Number(projectId),
       });
 
       res.status(201).json(fileInformation);
@@ -42,12 +45,12 @@ const controller = {
         .json({ message: "Erreur lors de la création de FileInformation" });
     }
   },
-  getFileInformationByIdCompany: async (req, res) => {
+  getFileInformationByIdProject: async (req, res) => {
     try {
       const { id } = req.params;
 
       const fileInformations = await models.fileInformation.findAll({
-        where: { companyId: id },
+        where: { projectId: id },
       });
 
       return res.status(200).json({ result: fileInformations });

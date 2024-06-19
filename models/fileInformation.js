@@ -31,17 +31,18 @@ const model = sequelize.define("fileInformation", {
   },
   companyId: {
     type: Sequelize.BIGINT,
-    allowNull: false,
+    allowNull: true,
     references: {
       model: "companies",
       key: "id",
     },
   },
-  projetId: {
-    type: Sequelize.BIGINT ? allowNull : false,
+  projectId: {
+    type: Sequelize.BIGINT,
+    allowNull: true,
     references: false,
     references: {
-      model: "projets",
+      model: "projects",
       key: "id",
     },
   },
