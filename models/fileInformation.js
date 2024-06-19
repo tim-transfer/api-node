@@ -24,11 +24,6 @@ const model = sequelize.define("fileInformation", {
     allowNull: false,
     unique: false,
   },
-  position: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: false,
-  },
   companyId: {
     type: Sequelize.BIGINT,
     allowNull: true,

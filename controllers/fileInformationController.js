@@ -5,20 +5,16 @@ const controller = {
       const {
         nameFile,
         isActive,
-        position,
         companyId,
         projectId,
         dateButoire,
-        extensionFile,
       } = req.body;
 
       if (
         !nameFile ||
         !isActive ||
-        !position ||
         !companyId ||
         !dateButoire ||
-        !extensionFile ||
         !projectId
       ) {
         return res.status(400).json({
@@ -30,10 +26,8 @@ const controller = {
       const fileInformation = await models.fileInformation.create({
         nameFile: nameFile,
         isActive: isActive,
-        position: Number(position),
         companyId: Number(companyId),
         dateLimit: new Date(dateButoire),
-        extensionFile: extensionFile,
         projectId: Number(projectId),
       });
 
