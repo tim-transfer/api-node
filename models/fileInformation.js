@@ -1,7 +1,7 @@
-import { Sequelize } from "sequelize";
 import sequelize from "../services/sequelize.js";
+import { Sequelize } from "sequelize";
 
-const model = sequelize.define("project", {
+const model = sequelize.define("fileInformation", {
   id: {
     type: Sequelize.BIGINT,
     primaryKey: true,
@@ -9,7 +9,7 @@ const model = sequelize.define("project", {
     allowNull: false,
     autoIncrement: true,
   },
-  nameProject: {
+  nameFile: {
     type: Sequelize.STRING,
     allowNull: false,
     unique: false,
@@ -19,21 +19,30 @@ const model = sequelize.define("project", {
     allowNull: false,
     unique: false,
   },
-  startingDate: {
+  dateLimit: {
     type: Sequelize.DATE,
     allowNull: false,
     unique: false,
   },
-  endingDate: {
-    type: Sequelize.DATE,
+  position: {
+    type: Sequelize.STRING,
     allowNull: false,
     unique: false,
   },
   companyId: {
     type: Sequelize.BIGINT,
-    allowNull: false,
+    allowNull: true,
     references: {
       model: "companies",
+      key: "id",
+    },
+  },
+  projectId: {
+    type: Sequelize.BIGINT,
+    allowNull: true,
+    references: false,
+    references: {
+      model: "projects",
       key: "id",
     },
   },

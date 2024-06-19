@@ -11,7 +11,7 @@ const dbDialect = "postgres";
 
 const disableHelmet = process.env.DISABLE_HELMET || false;
 
-const apiPort =  3001;
+const apiPort = 3001;
 const authAttemptsBeforeBlock = process.env.AUTH_ATTEMPTS_BEFORE_BLOCK || 5;
 const authBlockDurationInMinutes = process.env.AUTH_BLOCK_DURATION_MINUTES || 5;
 
@@ -20,7 +20,6 @@ const refreshSecret = "NqvYmJToyjT7Mo0XXM2bVUs4VdmgLu6f";
 const expiresIn = "30d";
 
 const basePath = "api";
-
 const config = {
   swaggerOptions: {
     swaggerDefinition: {

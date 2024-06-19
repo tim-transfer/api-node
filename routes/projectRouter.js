@@ -1,7 +1,6 @@
 import { Router } from "express";
 import controller from "../controllers/projectController.js";
 import passport from "passport";
-import { restrict } from "../services/middleware.js";
 
 const router = Router();
 
@@ -18,9 +17,9 @@ router.patch(
 );
 
 router.get(
-  "/projects",
+  "/company/projects/:idProject",
   passport.authenticate("jwt", { session: false }),
-  controller.getAll
+  controller.getAllProjects
 );
 
 router.get(
@@ -32,10 +31,7 @@ router.get(
 router.delete(
   "/project/:id",
   passport.authenticate("jwt", { session: false }),
-  restrict("1"),
   controller.delete
 );
-
-
 
 export default router;

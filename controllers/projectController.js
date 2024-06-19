@@ -1,90 +1,81 @@
 import models from "../models/index.js";
-import fileLogger from "../services/fileLogger.js";
 
 const controller = {
   createProject: async (req, res) => {
     try {
-      const { name, companyId, status } = req.body;
+      const { nameProject, startingDate, endingDate, companyId } = req.body;
 
-      if (!name || !companyId || !status ) {
+      if (!nameProject || !startingDate || !endingDate) {
         return res.status(400).json({
-          message: "Veuillez fournir toutes les informations nécessaires.",
+          message:
+            "Veuillez fournir toutes les informations nécessaires pour la création d'un plan de fichier.",
         });
       }
 
-      const savedProject = await models.project.create({
-        name: name,
+      const projectToSave = await models.project.create({
+        nameProject: nameProject,
+        startingDate: startingDate,
+        endingDate: endingDate,
         companyId: companyId,
-        status: status
-        });
-
-      res.status(201).json(savedProject);
-    } catch (error) {
-      fileLogger.error(error);
-      res.status(500).json({
-        result: false,
-        message: "Erreur, impossible d'enregistrer une nouvelle company.",
-        error: error,
+        isActive: true,
       });
+
+      res.status(201).json(projectToSave);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ message: "Erreur lors de la création d'un projet" });
     }
   },
 
   updateProject: async (req, res) => {
     try {
       const { id } = req.params;
-
       const { name, companyId, status } = req.body;
 
       if (!name || !companyId || !status) {
         return res.status(400).json({
           result: "",
-          error:
-            "La mise à jour du projet " +
-            name +
-            " ayant pour id " +
-            id +
-            " s'est mal déroulé",
+          error: `La mise à jour du projet ${name} ayant pour id ${id} s'est mal déroulée`,
         });
       }
 
-      const existingProject= await models.project.findOne({ where: { id } });
+      const existingProject = await models.project.findOne({ where: { id } });
 
       await existingProject.update({
         name: name,
         companyId: companyId,
-        status: status
+        status: status,
       });
 
       await existingProject.save();
 
       res.status(200).json({
-        result:
-          "Le projet ayant pour id : " + id + " a bien été mis à jour.",
+        result: `Le projet ayant pour id : ${id} a bien été mis à jour.`,
       });
     } catch (error) {
-      fileLogger.error(error);
+      console.error(error);
       res.status(500).json({
         result: false,
-        error:
-          "Erreur lors de la modification de le projet ayant pour id : " +
-          id,
+        error: `Erreur lors de la modification de le projet ayant pour id : ${id}`,
       });
     }
   },
 
-  getAll: async (req, res) => {
+  getAllProjects: async (req, res) => {
     try {
-      const projects = await models.project.findAll();
-      const plainProjects = projects.map((project) =>
-        project.get({ plain: true })
-      );
-      return res.status(200).json({ result: plainProjects });
+      const { idProject } = req.params; // Changement de companyId à idProject
+
+      const projects = await models.project.findAll({
+        where: { companyId: idProject }, // Utilisez idProject pour la correspondance
+      });
+
+      res.json(projects);
     } catch (error) {
-      fileLogger.error(error);
-      return res.status(500).json({
-        result: false,
-        error:
-          "Erreur lors de la récupération de tous les entreprises." + error,
+      console.error(error);
+      res.status(500).json({
+        message: "Erreur lors de la récupération de tous les projets.",
       });
     }
   },
@@ -99,11 +90,10 @@ const controller = {
 
       return res.status(200).json({ result: project });
     } catch (error) {
-      fileLogger.error(error);
+      console.error(error);
       return res.status(500).json({
         result: false,
-        error:
-          "Erreur lors de la récupération du nom d'une entreprise." + error,
+        error: `Erreur lors de la récupération du projet avec l'id ${id}. ${error}`,
       });
     }
   },
@@ -123,19 +113,18 @@ const controller = {
       if (rowsDeleted > 0) {
         res
           .status(200)
-          .json({ result: "Projet supprimée avec succès", error: "" });
+          .json({ result: "Projet supprimé avec succès", error: "" });
       } else {
         res.status(404).json({
           result: false,
-          error: "Aucune projet trouvée avec cet identifiant",
+          error: "Aucun projet trouvé avec cet identifiant",
         });
       }
     } catch (error) {
-      fileLogger.error(error);
+      console.error(error);
       res.status(500).json({
         result: false,
-        error:
-          `Erreur lors de la suppression de le projet ayant pour id : ` + id,
+        error: `Erreur lors de la suppression du projet ayant pour id : ${id}`,
       });
     }
   },
