@@ -108,9 +108,9 @@ const controller = {
         where: { id },
       });
 
-      const rowsDeleted = await project.destroy();
+    const rowsDeleted = await project.destroy();
 
-      if (rowsDeleted > 0) {
+    if (rowsDeleted > 0) {
         res
           .status(200)
           .json({ result: "Projet supprimé avec succès", error: "" });

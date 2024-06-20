@@ -60,6 +60,10 @@ const model = sequelize.define(
         model: "roles",
         key: "id",
       },
+    },
+    isAdmin: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
     }
   },
   {

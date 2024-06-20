@@ -4,9 +4,9 @@ import fileLogger from "../services/fileLogger.js";
 const controller = {
   createCompany: async (req, res) => {
     try {
-      const { name, address, idUser, siret, direct } = req.body;
+      const { name, address, siret, contact, contactMailAddress, contactPhoneNumber } = req.body;
 
-      if (!name || !address || !idUser || !siret || !direct) {
+      if (!name || !address || !siret || !contact || !contactMailAddress || !contactPhoneNumber) {
         return res.status(400).json({
           message: "Veuillez fournir toutes les informations nécessaires.",
         });
@@ -15,9 +15,10 @@ const controller = {
       const savedCompany = await models.company.create({
         name: name,
         address: address,
-        userId: idUser,
         siret: siret,
-        direct: direct,
+        contactMailAddress : contactMailAddress,
+        contact : contact,
+        contactPhoneNumber : contactPhoneNumber
       });
 
       res.status(201).json(savedCompany);
@@ -35,9 +36,9 @@ const controller = {
     try {
       const { id } = req.params;
 
-      const { name, address, siret, direct } = req.body;
+      const { name, address, siret, contact, contactMailAddress, contactPhoneNumber } = req.body;
 
-      if (!name || !address || !siret || !direct) {
+      if (!name || !address || !siret || !contact || !contactMailAddress || !contactPhoneNumber) {
         return res.status(400).json({
           result: "",
           error:
@@ -55,7 +56,9 @@ const controller = {
         name: name,
         address: address,
         siret: siret,
-        direct: direct,
+        contactMailAddress : contactMailAddress,
+        contact : contact,
+        contactPhoneNumber : contactPhoneNumber
       });
 
       await existingCompany.save();

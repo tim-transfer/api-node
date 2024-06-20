@@ -24,15 +24,21 @@ const model = sequelize.define("company", {
     allowNull: true,
     unique: true
   },
-  direct: {
+  contact: {
     type: Sequelize.STRING,
     allowNull: true,
-    unique: false
+    unique: true
   },
-  userId: {
-    type: Sequelize.BIGINT,
-    allowNull: false,
+  contactPhoneNumber: {
+    type: Sequelize.STRING,
+    allowNull: true,
+    unique: true
   },
+  contactMailAddress: {
+    type: Sequelize.STRING,
+    allowNull: true,
+    unique: true
+  }
 });
 
 export default model;
