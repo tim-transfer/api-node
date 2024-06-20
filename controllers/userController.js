@@ -26,8 +26,8 @@ const controller = {
   },
 
   getOne: async (req, res) => {
+    const { id } = req.params;
     try {
-      const { id } = req.params;
 
       const user = await models.user.findOne({
         where: { id },
@@ -48,7 +48,7 @@ const controller = {
         result: false,
         error:
           "impossible de récupérer les informations de l'utilisateur ayant pour id : " +
-          id,
+          id
       });
     }
   },
