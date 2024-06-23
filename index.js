@@ -1,21 +1,28 @@
-import express from 'express';
-import morgan from 'morgan';
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
-import routes from './routes/index.js';
-import config from './config.js';
-import cors from 'cors';
-import helmet from 'helmet';
-import logger from './services/logger.js';
-import passport from 'passport';
-import './services/sequelize.js';
-import { hookJwtStrategy } from './services/passport.js';
+import express from "express";
+import morgan from "morgan";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import routes from "./routes/index.js";
+import config from "./config.js";
+import cors from "cors";
+import helmet from "helmet";
+import passport from "passport";
+import { hookJwtStrategy } from "./services/passport.js";
+import SequelizeTransport from "./utils/dbTransport.js"; // Importez le transport personnalisé
+import winston from "winston";
+import "./services/sequelize.js"; // Initialisation de Sequelize
 
 const app = express();
 
-// Logger
-logger.info("✅ Morgan logger activated");
-app.use(morgan('dev'));
+// Configurez Winston pour utiliser le transport personnalisé
+const logger = winston.createLogger({
+  level: "info",
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [new winston.transports.Console(), new SequelizeTransport()],
+});
 
 // Cors
 logger.info("✅ Cors activated");
@@ -23,12 +30,12 @@ app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
 
 // Disable express cache
 logger.info("✅ Express caching disabled");
-app.disable('etag');
+app.disable("etag");
 
 // Helmet
 logger.info("✅ Helmet activated");
 if (!config.disabledHelmet) {
-    app.use(helmet({ crossOriginResourcePolicy: false }));
+  app.use(helmet({ crossOriginResourcePolicy: false }));
 }
 
 // Passport
@@ -41,16 +48,30 @@ logger.info("✅ Body parser activated");
 app.use(express.json());
 
 // Swagger
-logger.info("✅ Swagger docs activated")
+logger.info("✅ Swagger docs activated");
 const swaggerSpec = swaggerJSDoc(config.swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Middleware Morgan pour utiliser Winston
+app.use(
+  morgan("combined", {
+    stream: {
+      write: (message) => logger.info(message.trim()),
+    },
+  })
+);
 
 // Routes
 logger.info("✅ Routes available");
-Object.values(routes).forEach(route => app.use(`/${config.api.basePath}`, route));
+Object.values(routes).forEach((route) =>
+  app.use(`/${config.api.basePath}`, route)
+);
 
-app.listen(config.api.port, () => {
-    logger.info('🚀    -----------------------------   🚀');
-    logger.info(`🚀     Server started on port ${config.api.port}    🚀`);
-    logger.info('🚀    -----------------------------   🚀');
-})
+const port = process.env.PORT || config.api.port;
+
+// Démarrage du serveur
+app.listen(port, () => {
+  logger.info("🚀    -----------------------------   🚀");
+  logger.info(`🚀     Server started on port ${port}    🚀`);
+  logger.info("🚀    -----------------------------   🚀");
+});
