@@ -112,10 +112,25 @@ const controller = {
 
   register: async (req, res) => {
     try {
-      const { email, lastName, firstName, companyId, idRole, isPostman, password } =
-        req.body;
+      const {
+        email,
+        lastName,
+        firstName,
+        companyId,
+        idRole,
+        isPostman,
+        password,
+        isAdmin,
+      } = req.body;
 
-      if (!email || !lastName || !firstName || !companyId || !idRole) {
+      if (
+        !email ||
+        !lastName ||
+        !firstName ||
+        !companyId ||
+        !idRole ||
+        !isAdmin
+      ) {
         return res
           .status(400)
           .json({ result: "", error: "Adresse mail et mot de passe requis" });
@@ -135,9 +150,10 @@ const controller = {
 
       if (!isPostman) {
         passwordToEnter = generateRandomPassword(10);
+        sendMailToFirstConnection(email, passwordToEnter);
+      } else {
+        passwordToEnter = password;
       }
-
-      sendMailToFirstConnection(email, passwordToEnter);
 
       await models.user.create({
         email: email,
@@ -146,6 +162,7 @@ const controller = {
         firstName: firstName,
         companyId: companyId,
         idRole: idRole,
+        isAdmin: isAdmin,
       });
 
       res.status(200).json({ result: "register", error: "" });
