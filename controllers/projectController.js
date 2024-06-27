@@ -65,13 +65,11 @@ const controller = {
 
   getAllProjects: async (req, res) => {
     try {
-      const { idProject } = req.params; // Changement de companyId à idProject
-
+      const { idCompany } = req.params; // Changement de companyId à idProject
       const projects = await models.project.findAll({
-        where: { companyId: idProject }, // Utilisez idProject pour la correspondance
+        where: { companyId: idCompany }, // Utilisez idProject pour la correspondance
       });
-
-      res.json(projects);
+      return res.status(200).json({ result: projects });
     } catch (error) {
       console.error(error);
       res.status(500).json({

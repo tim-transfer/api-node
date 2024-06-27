@@ -17,7 +17,7 @@ router.patch(
 );
 
 router.get(
-  "/company/projects/:idProject",
+  "/company/projects/:idCompany",
   passport.authenticate("jwt", { session: false }),
   controller.getAllProjects
 );
