@@ -67,7 +67,7 @@ Object.values(routes).forEach((route) =>
   app.use(`/${config.api.basePath}`, route)
 );
 
-const port = process.env.PORT || config.api.port;
+const port = process.env.API_PORT || config.api.port;
 
 // Démarrage du serveur
 app.listen(port, () => {

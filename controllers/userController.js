@@ -16,6 +16,14 @@ const controller = {
           "updatedAt",
           "deletedAt",
         ],
+        includes: [
+          {
+            model: models.role,
+          },
+          {
+            model: models.company,
+          },
+        ],
       };
 
       const users = await models.user.findAll(select);
@@ -55,7 +63,9 @@ const controller = {
   me: async (req, res) => {
     try {
       const user = await models.user.findOne({ where: { id: req.user.id } });
-      res.status(200).json({ result: user, error: "" });
+      const role = await models.role.findOne({ where: { id: user.idRole } });
+
+      res.status(200).json({ result: { ...user.dataValues, role }, error: "" });
     } catch (error) {
       fileLogger.error(error);
       res.status(500).json({ result: false, error: "Erreur interne" });

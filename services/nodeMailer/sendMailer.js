@@ -1,14 +1,26 @@
 import nodemailer from "nodemailer";
+import config from "../../config.js";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   secure: false, // Use `true` for port 465, `false` for all other ports
   auth: {
-    user: "timeTransfer53@gmail.com",
-    pass: "brhg llyn npoc xtmb",
+    user: config.mail.address,
+    pass: config.mail.pass,
   },
 });
+
+const sendSignUpMail = async (mail, url) => {
+  const send = await transporter.sendMail({
+    to: mail,
+    subject: "TimTransfer - Créez votre compte",
+    html: `<p>Bonjour,</p>
+      <p>Veuillez créer votre compte via <a href="${url}">ce lien</a>.</p>
+      <p>L'équipe DataTim</p>`,
+  });
+  return send;
+};
 
 const sendMailToFirstConnection = async (addressToSend, password) => {
   const info = await transporter.sendMail({
@@ -26,4 +38,7 @@ const sendMailToFirstConnection = async (addressToSend, password) => {
   });
 };
 
-export default sendMailToFirstConnection;
+export default {
+  sendSignUpMail,
+  sendMailToFirstConnection,
+};

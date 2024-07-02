@@ -6,7 +6,7 @@ import { restrict } from "../services/middleware.js";
 const router = Router();
 
 router.get(
-  "/users",
+  "/user",
   passport.authenticate("jwt", { session: false }),
   Controller.getAll
 );

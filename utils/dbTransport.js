@@ -1,5 +1,5 @@
 import Transport from 'winston-transport';
-import Log from './../models/Log.js'; // Importez le modèle de log
+import Log from '../models/log.js'; // Importez le modèle de log
 
 class SequelizeTransport extends Transport {
   constructor(opts) {

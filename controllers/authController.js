@@ -31,7 +31,7 @@ const controller = {
 
       const blockEndTime = new Date(
         user?.lastAuthFailedAttempt?.getTime() +
-          config.api.authBlockDurationInMinutes * 60000
+        config.api.authBlockDurationInMinutes * 60000
       );
       const remainingBlockTimeInMinutes = Math.ceil(
         (blockEndTime - new Date().getTime()) / 60000
@@ -39,7 +39,7 @@ const controller = {
 
       if (
         user.consecutiveAuthFailedAttempts >=
-          config.api.authAttemptsBeforeBlock &&
+        config.api.authAttemptsBeforeBlock &&
         blockEndTime > new Date()
       ) {
         return res.status(401).json({
@@ -112,64 +112,43 @@ const controller = {
 
   register: async (req, res) => {
     try {
-      const {
-        email,
-        lastName,
-        firstName,
-        companyId,
-        idRole,
-        isPostman,
-        password,
-        isAdmin,
-      } = req.body;
+      const { email } = req.body;
 
-      if (
-        !email ||
-        !lastName ||
-        !firstName ||
-        !companyId ||
-        !idRole ||
-        !isAdmin
-      ) {
-        return res
-          .status(400)
-          .json({ result: "", error: "Adresse mail et mot de passe requis" });
+      if (!email) {
+        return res.status(400).json({ result: '', error: 'Adresse mail requis' });
       }
 
-      const existingUser = await models.user.findOne({
-        where: { email, deletedAt: null },
-      });
+      const existingUser = await models.user.findOne({ where: { email } });
 
       if (existingUser) {
-        return res
-          .status(400)
-          .json({ result: false, error: "L'adresse mail est déjà utilisée" });
+        return res.status(400).json({ result: false, error: 'L\'adresse mail est déjà utilisée' });
       }
 
-      let passwordToEnter = "";
+      let newUser = await models.user.create({ email });
+      let token = jwt.sign({ id: newUser.id, email: newUser.email, password: newUser.password }, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
+      await mailService.sendSignUpMail(email, `${config.app.url}/register?token=${token}`);
 
-      if (!isPostman) {
-        passwordToEnter = generateRandomPassword(10);
-        sendMailToFirstConnection(email, passwordToEnter);
-      } else {
-        passwordToEnter = password;
-      }
 
-      await models.user.create({
-        email: email,
-        password: passwordToEnter,
-        lastName: lastName,
-        firstName: firstName,
-        companyId: companyId,
-        idRole: idRole,
-        isAdmin: isAdmin,
-      });
-
-      res.status(200).json({ result: "register", error: "" });
+      res.status(200).json({ result: newUser, error: '' });
     } catch (error) {
-      fileLogger.error(error);
       handleError(error, res);
     }
+  },
+
+  checkSignUpToken: async (req, res) => {
+    try {
+      const { token } = req.body;
+
+      if (!token) {
+        return res.status(400).json({ result: false, error: 'Token requis' });
+      }
+
+      jwt.verify(token, config.jwt.secret, async (err, decoded) => { });
+
+    } catch (error) {
+      handleError(error, res);
+    }
+
   },
 
   refreshToken: async (req, res) => {

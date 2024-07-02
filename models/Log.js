@@ -2,7 +2,7 @@ import sequelize from "../services/sequelize.js";
 import { Sequelize } from "sequelize";
 
 // Modèle de log
-const Log = sequelize.define("Log", {
+const log = sequelize.define("log", {
   level: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -28,4 +28,4 @@ sequelize
     console.error("Erreur lors de la synchronisation du modèle:", err)
   );
 
-export default Log;
+export default log;
