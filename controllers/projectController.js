@@ -41,21 +41,21 @@ const controller = {
   updateProject: async (req, res) => {
     try {
       const { id } = req.params;
-      const { name, companyId, status } = req.body;
+      const { nameProject, startingDate, endingDate } = req.body;
 
-      if (!name || !companyId || !status) {
+      if (!nameProject || !startingDate || !endingDate) {
         return res.status(400).json({
           result: "",
-          error: `La mise à jour du projet ${name} ayant pour id ${id} s'est mal déroulée`,
+          error: `La mise à jour du projet ${nameProject} ayant pour id ${id} s'est mal déroulée`,
         });
       }
 
       const existingProject = await models.project.findOne({ where: { id } });
 
       await existingProject.update({
-        name: name,
-        companyId: companyId,
-        status: status,
+        nameProject: nameProject,
+        startingDate: startingDate,
+        endingDate: endingDate,
       });
 
       await existingProject.save();
