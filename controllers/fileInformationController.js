@@ -2,19 +2,16 @@ import models from "../models/index.js";
 const controller = {
   createFileInformation: async (req, res) => {
     try {
-      const {
-        nameFile,
-        isActive,
-        companyId,
-        projectId,
-        dateButoire,
-      } = req.body;
+      const { endingDate, documents } = req.body;
+
+documents.forEach(async element  => {
+  
 
       if (
-        !nameFile ||
-        !isActive ||
-        !companyId ||
-        !dateButoire ||
+        !element.name ||
+        // !isActive ||
+        !element.type ||
+        !endingDate ||
         !projectId
       ) {
         return res.status(400).json({
@@ -26,11 +23,11 @@ const controller = {
       const fileInformation = await models.fileInformation.create({
         nameFile: nameFile,
         isActive: isActive,
-        companyId: Number(companyId),
-        dateLimit: new Date(dateButoire),
+        typeFile: typeFile,
+        dateLimit: new Date(dateLimit),
         projectId: Number(projectId),
       });
-
+    });
       res.status(201).json(fileInformation);
     } catch (error) {
       console.error(error);

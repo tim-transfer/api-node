@@ -1,9 +1,9 @@
 import models from "../models/index.js";
-
+import fileInformationController from "../controllers/fileInformationController.js";
 const controller = {
   createProject: async (req, res) => {
     try {
-      const { nameProject, startingDate, endingDate, companyId } = req.body;
+      const { nameProject, startingDate, endingDate, companyId, documents } = req.body;
 
       if (!nameProject || !startingDate || !endingDate) {
         return res.status(400).json({
@@ -18,6 +18,15 @@ const controller = {
         endingDate: endingDate,
         companyId: companyId,
         isActive: true,
+      });
+      documents.forEach(async element => {
+        await models.fileInformation.create({
+          nameFile: element.name,
+          isActive: true,
+          typeFile: element.type,
+          dateLimit: endingDate,
+          projectId: projectToSave.id
+        })
       });
 
       res.status(201).json(projectToSave);

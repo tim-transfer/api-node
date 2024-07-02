@@ -14,6 +14,12 @@ const model = sequelize.define("fileInformation", {
     allowNull: false,
     unique: false,
   },
+  typeFile: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: false,
+  },
+
   isActive: {
     type: Sequelize.BOOLEAN,
     allowNull: false,
@@ -23,14 +29,6 @@ const model = sequelize.define("fileInformation", {
     type: Sequelize.DATE,
     allowNull: false,
     unique: false,
-  },
-  companyId: {
-    type: Sequelize.BIGINT,
-    allowNull: true,
-    references: {
-      model: "companies",
-      key: "id",
-    },
   },
   projectId: {
     type: Sequelize.BIGINT,

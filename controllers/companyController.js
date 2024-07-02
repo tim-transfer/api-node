@@ -35,7 +35,6 @@ const controller = {
   updateCompany: async (req, res) => {
     try {
       const { id } = req.params;
-
       const { name, address, siret, contact, contactMailAddress, contactPhoneNumber } = req.body;
 
       if (!name || !address || !siret || !contact || !contactMailAddress || !contactPhoneNumber) {
