@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import sequelize from "../services/sequelize.js";
 import * as bcrypt from "../utils/bcrypt.js";
+import models from "./index.js";
 
 const model = sequelize.define(
   "user",
@@ -22,10 +23,6 @@ const model = sequelize.define(
       allowNull: true,
       unique: false,
     },
-    companyId: {
-      type: Sequelize.INTEGER,
-      allowNull: true,
-    },
     email: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -33,7 +30,7 @@ const model = sequelize.define(
     },
     password: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     refreshToken: {
       type: Sequelize.TEXT,
@@ -60,10 +57,6 @@ const model = sequelize.define(
         model: "roles",
         key: "id",
       },
-    },
-    isAdmin: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
     }
   },
   {

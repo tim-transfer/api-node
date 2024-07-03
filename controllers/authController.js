@@ -2,16 +2,15 @@ import models from "../models/index.js";
 import jwt from "jsonwebtoken";
 import config from "../config.js";
 import * as bcrypt from "../utils/bcrypt.js";
-import sendMailToFirstConnection from "./../services/nodeMailer/sendMailer.js";
-import generateRandomPassword from "./../services/passwordGenerate.js";
 import { default as handleError } from "../utils/error.js";
 import fileLogger from "../services/fileLogger.js";
+import mailService from "../services/mailService.js";
+import sequelize from "../services/sequelize.js";
 
 const controller = {
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
-      console.log(email, password);
 
       if (!email || !password) {
         return res.status(400).json({
@@ -112,7 +111,7 @@ const controller = {
 
   register: async (req, res) => {
     try {
-      const { email } = req.body;
+      const { email, role, companyId } = req.body;
 
       if (!email) {
         return res.status(400).json({ result: '', error: 'Adresse mail requis' });
@@ -120,17 +119,20 @@ const controller = {
 
       const existingUser = await models.user.findOne({ where: { email } });
 
+      const roleData = await models.role.findOne({ where: { libelle: role } });
+
       if (existingUser) {
         return res.status(400).json({ result: false, error: 'L\'adresse mail est déjà utilisée' });
       }
 
-      let newUser = await models.user.create({ email });
-      let token = jwt.sign({ id: newUser.id, email: newUser.email, password: newUser.password }, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
+      let newUser = await models.user.create({ email, companyId, idRole: roleData.id });
+      let token = jwt.sign({ id: newUser.id, email: newUser.email }, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
       await mailService.sendSignUpMail(email, `${config.app.url}/register?token=${token}`);
 
 
       res.status(200).json({ result: newUser, error: '' });
     } catch (error) {
+      console.log(error);
       handleError(error, res);
     }
   },
@@ -143,12 +145,43 @@ const controller = {
         return res.status(400).json({ result: false, error: 'Token requis' });
       }
 
-      jwt.verify(token, config.jwt.secret, async (err, decoded) => { });
+      jwt.verify(token, config.jwt.secret, async (err, decoded) => {
+        if (err) {
+          return res.status(401).json({ result: false, error: 'Token invalide' });
+        }
+
+        const user = await models.user.findOne({ where: { id: decoded.id } });
+
+        if (!user) {
+          return res.status(404).json({ result: false, error: 'Utilisateur non trouvé' });
+        }
+
+        res.status(200).json({ result: user, error: '' });
+      });
 
     } catch (error) {
       handleError(error, res);
     }
 
+  },
+
+  signUpConfirmation: async (req, res) => {
+    const { id, password, email, firstName, lastName } = req.body;
+
+    //const translations = await utils.language.getTranslations(req);
+    const user = await models.user.findByPk(id);
+
+    if (user.email === email) {
+      await sequelize.transaction(async (t) => {
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.password = password;
+        user.accountCreationDate = new Date();
+        await user.save({ transaction: t });
+
+        res.status(200).json({ result: user, error: '' });
+      });
+    }
   },
 
   refreshToken: async (req, res) => {

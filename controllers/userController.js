@@ -4,6 +4,8 @@ import fileLogger from "../services/fileLogger.js";
 const controller = {
   getAll: async (req, res) => {
     try {
+
+      const { role } = req.query;
       const select = {
         attributes: [
           "id",
@@ -16,19 +18,26 @@ const controller = {
           "updatedAt",
           "deletedAt",
         ],
-        includes: [
-          {
-            model: models.role,
-          },
+        include: [
           {
             model: models.company,
-          },
-        ],
+            throught: { attributes: ["companyId"] },
+          }
+        ]
       };
 
       const users = await models.user.findAll(select);
-      res.status(200).json({ result: users, error: "" });
+      const roleData = await models.role.findOne({ where: { libelle: role } });
+
+      if (role) {
+        const filteredUsers = users.filter(user => user.dataValues.idRole === roleData.dataValues.id).map(user => { return { ...user.dataValues, role: roleData.dataValues.libelle } });
+
+        return res.status(200).json({ result: filteredUsers, error: "" });
+      } else {
+        return res.status(200).json({ result: users.map(user => { return { ...user.dataValues, role: roleData.dataValues.libelle } }), error: "" });
+      }
     } catch (error) {
+      console.log(error)
       res.status(500).json({ result: false, error: "Erreur interne" });
     }
   },

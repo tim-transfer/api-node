@@ -21,7 +21,7 @@ const logger = winston.createLogger({
     winston.format.timestamp(),
     winston.format.json()
   ),
-  transports: [new winston.transports.Console(), new SequelizeTransport()],
+  transports: [new SequelizeTransport()],
 });
 
 // Cors
@@ -53,13 +53,7 @@ const swaggerSpec = swaggerJSDoc(config.swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Middleware Morgan pour utiliser Winston
-app.use(
-  morgan("combined", {
-    stream: {
-      write: (message) => logger.info(message.trim()),
-    },
-  })
-);
+app.use(morgan("dev"));
 
 // Routes
 logger.info("✅ Routes available");
