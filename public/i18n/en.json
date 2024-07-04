@@ -211,5 +211,6 @@
     "createProject": "Create Project",
     "addDocumentField": "Add Document Field",
     "messagings": "Messagings",
-    "messaging": "Messaging"
+    "messaging": "Messaging",
+    "documentDelete" : "Document Delete"
 }

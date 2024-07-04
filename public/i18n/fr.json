@@ -213,5 +213,6 @@
     "createProject": "Création d'un projet",
     "addDocumentField": "Ajout d'un nouveau champ document",
     "messagings": "Messageries",
-    "messaging": "Messagerie"
+    "messaging": "Messagerie",
+    "documentDelete" : "Document supprimé"
 }

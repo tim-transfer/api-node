@@ -2,33 +2,19 @@ import models from "../models/index.js";
 const controller = {
   createFileInformation: async (req, res) => {
     try {
-      const { endingDate, documents } = req.body;
-
+      const { id, documents, endingDate } = req.body;
       documents.forEach(async element => {
-
-
-        if (
-          !element.name ||
-          // !isActive ||
-          !element.type ||
-          !endingDate ||
-          !projectId
-        ) {
-          return res.status(400).json({
-            message:
-              "Veuillez fournir toutes les informations nécessaires pour la création d'un plan de fichier.",
-          });
+          if(element.id == undefined){
+          await models.fileInformation.create({
+            nameFile: element.name,
+            isActive: true,
+            typeFile: element.type,
+            dateLimit: endingDate,
+            projectId: id
+          })
         }
-
-        const fileInformation = await models.fileInformation.create({
-          nameFile: nameFile,
-          isActive: isActive,
-          typeFile: typeFile,
-          dateLimit: new Date(dateLimit),
-          projectId: Number(projectId),
-        });
       });
-      res.status(201).json(fileInformation);
+      res.status(201).json();
     } catch (error) {
       console.error(error);
       res
