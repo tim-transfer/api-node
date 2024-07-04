@@ -10,6 +10,7 @@
     "projects": "Mes projets",
     "nameProject": "Nom du projet",
     "firstName": "Prénom",
+    "addDocumentField": "Ajouter un document",
     "lastName": "Nom",
     "emailAddress": "Adresse e-mail",
     "password": "Mot de passe",
