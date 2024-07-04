@@ -206,5 +206,12 @@
     "startingFrom": "From",
     "unit": "unit",
     "clear": "Clear",
-    "apply": "Apply"
+    "apply": "Apply",
+    "startingDate": "Starting Date",
+    "endingDate": "Ending Date",
+    "createProject": "Create Project",
+    "addDocumentField": "Add Document Field",
+    "messagings": "Messagings",
+    "messaging": "Messaging"
+
 }
