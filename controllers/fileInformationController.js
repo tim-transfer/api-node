@@ -53,6 +53,36 @@ const controller = {
       });
     }
   },
-};
+  delete: async (req, res) => {
+    let { id } = req.params;
+    try {
+  
+      id = Number(id);
+  
+      const fileInformation = await models.fileInformation.findOne({
+        where: { id },
+      });
+  
+    const rowsDeleted = await fileInformation.destroy();
+  
+    if (rowsDeleted > 0) {
+        res
+          .status(200)
+          .json({ result: "Projet supprimé avec succès", error: "" });
+      } else {
+        res.status(404).json({
+          result: false,
+          error: "Aucun projet trouvé avec cet identifiant",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        result: false,
+        error: `Erreur lors de la suppression du projet ayant pour id : ${id}`,
+      });
+    }
+  }, 
+}
 
 export default controller;

@@ -15,5 +15,9 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   controller.createFileInformation
 );
-
+router.delete(
+  "/fileInformation/:id",
+  passport.authenticate("jwt", { session: false }),
+  controller.delete
+);
 export default router;
