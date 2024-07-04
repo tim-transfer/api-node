@@ -12,6 +12,9 @@ import sendMessage from "./sendMessage.js";
 user.belongsTo(company, { foreignKey: 'companyId' });
 company.hasMany(user, { foreignKey: 'companyId' });
 
+document.belongsTo(fileInformation, { foreignKey: 'fileInformationId' });
+fileInformation.hasOne(document, { foreignKey: 'fileInformationId' });
+
 export default {
     company,
     user,

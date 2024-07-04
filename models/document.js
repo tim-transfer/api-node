@@ -17,16 +17,7 @@ const model = sequelize.define("document", {
   iv: {
     type: Sequelize.STRING,
     allowNull: false
-  },
-  projectId: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    references: {
-        model: 'projects', 
-        key: 'id'
-    }
-},
-  // Ajoutez d'autres champs comme nécessaire
+  }
 });
 
 export default model;

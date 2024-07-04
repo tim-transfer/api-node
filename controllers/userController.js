@@ -85,23 +85,9 @@ const controller = {
     try {
       const { id } = req.params;
 
-      const { email, lastName, firstName, companyId, idRole } = req.body;
-
-      if (!email || !lastName || !firstName || !companyId || !idRole) {
-        return res
-          .status(400)
-          .json({ result: "", error: "Adresse mail et mot de passe requis" });
-      }
-
       const existingUser = await models.user.findOne({ where: { id } });
 
-      await existingUser.update({
-        email: email,
-        lastName,
-        firstName,
-        companyId,
-        idRole,
-      });
+      await existingUser.update(req.body);
 
       await existingUser.save();
 

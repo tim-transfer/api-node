@@ -25,6 +25,8 @@ const secret = process.env.JWT_SECRET;
 const refreshSecret = process.env.JWT_REFRESH_SECRET;
 const expiresIn = "30d";
 
+const encryptionKey = process.env.ENCRYPTION_KEY || "changeme";
+
 const basePath = "api";
 const config = {
   swaggerOptions: {
@@ -58,6 +60,7 @@ const config = {
     basePath,
     authAttemptsBeforeBlock: authAttemptsBeforeBlock,
     authBlockDurationInMinutes: authBlockDurationInMinutes,
+    encryptionKey,
   },
   jwt: {
     secret,

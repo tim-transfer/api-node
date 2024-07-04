@@ -11,6 +11,7 @@ import { hookJwtStrategy } from "./services/passport.js";
 import SequelizeTransport from "./utils/dbTransport.js"; // Importez le transport personnalisé
 import winston from "winston";
 import "./services/sequelize.js"; // Initialisation de Sequelize
+import bodyParser from "body-parser";
 
 const app = express();
 
@@ -23,6 +24,8 @@ const logger = winston.createLogger({
   ),
   transports: [new SequelizeTransport()],
 });
+
+app.use(bodyParser.json({ limit: '50mb' }));
 
 // Cors
 logger.info("✅ Cors activated");

@@ -4,30 +4,30 @@ const controller = {
     try {
       const { endingDate, documents } = req.body;
 
-documents.forEach(async element  => {
-  
+      documents.forEach(async element => {
 
-      if (
-        !element.name ||
-        // !isActive ||
-        !element.type ||
-        !endingDate ||
-        !projectId
-      ) {
-        return res.status(400).json({
-          message:
-            "Veuillez fournir toutes les informations nécessaires pour la création d'un plan de fichier.",
+
+        if (
+          !element.name ||
+          // !isActive ||
+          !element.type ||
+          !endingDate ||
+          !projectId
+        ) {
+          return res.status(400).json({
+            message:
+              "Veuillez fournir toutes les informations nécessaires pour la création d'un plan de fichier.",
+          });
+        }
+
+        const fileInformation = await models.fileInformation.create({
+          nameFile: nameFile,
+          isActive: isActive,
+          typeFile: typeFile,
+          dateLimit: new Date(dateLimit),
+          projectId: Number(projectId),
         });
-      }
-
-      const fileInformation = await models.fileInformation.create({
-        nameFile: nameFile,
-        isActive: isActive,
-        typeFile: typeFile,
-        dateLimit: new Date(dateLimit),
-        projectId: Number(projectId),
       });
-    });
       res.status(201).json(fileInformation);
     } catch (error) {
       console.error(error);
@@ -41,7 +41,7 @@ documents.forEach(async element  => {
       const { id } = req.params;
 
       const fileInformations = await models.fileInformation.findAll({
-        where: { projectId: id },
+        where: { projectId: id }, include: { model: models.document }
       });
 
       return res.status(200).json({ result: fileInformations });

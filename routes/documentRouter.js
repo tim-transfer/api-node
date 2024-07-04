@@ -6,7 +6,7 @@ import checkSignatureLink from "../middlewares/checkSignatureLink.js";
 
 const router = Router();
 
-router.put("/document/add", controller.createDocument);
+router.put("/document/add", passport.authenticate("jwt", { session: false }), controller.createDocument);
 router.patch(
   "/document/update/:id",
   passport.authenticate("jwt", { session: false }),
@@ -16,6 +16,12 @@ router.delete(
   "/document/delete/:id",
   passport.authenticate("jwt", { session: false }),
   controller.deleteDocument
+);
+
+router.get(
+  "/document/byProject/:id",
+  passport.authenticate("jwt", { session: false }),
+  controller.getDocumentByProjectId
 );
 
 router.post(

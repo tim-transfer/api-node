@@ -10,7 +10,6 @@
     "projects": "Mes projets",
     "nameProject": "Nom du projet",
     "firstName": "Prénom",
-    "addDocumentField": "Ajouter un document",
     "lastName": "Nom",
     "emailAddress": "Adresse e-mail",
     "password": "Mot de passe",
@@ -215,5 +214,4 @@
     "addDocumentField": "Ajout d'un nouveau champ document",
     "messagings": "Messageries",
     "messaging": "Messagerie"
-
 }

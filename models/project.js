@@ -26,7 +26,6 @@ const model = sequelize.define("project", {
   },
   endingDate: {
     type: Sequelize.DATE,
-    allowNull: false,
     unique: false,
   },
   companyId: {
