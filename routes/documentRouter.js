@@ -23,6 +23,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   controller.getDocumentByProjectId
 );
+router.get("/document/:id", passport.authenticate("jwt", { session: false }), controller.getDocumentById);
 
 router.post(
   "/document/generate-link",
@@ -35,8 +36,10 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   checkSignatureLink,
   (req, res) => {
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `inline; filename="${req.document.name}"`);
     req.link.update({ used: true });
-    res.status(200).send(req.document);
+    res.status(200).send(req.decryptedContent);
   }
 );
 

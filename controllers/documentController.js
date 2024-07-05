@@ -51,8 +51,9 @@ const controller = {
     }
   },
   // Fonction pour récupérer un document par son ID et le décrypter
-  getDocumentById: async (id) => {
+  getDocumentById: async (req, res) => {
     try {
+      const { id } = req.params;
       const document = await Document.findOne({ where: { id } });
       if (!document) {
         return res.status(404).json({ message: "Document non trouvé" });
