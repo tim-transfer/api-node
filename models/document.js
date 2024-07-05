@@ -12,7 +12,7 @@ const model = sequelize.define("document", {
   },
   type: {
     type: Sequelize.TEXT,
-    allowNull: false
+    allowNull: true
   },
   iv: {
     type: Sequelize.STRING,
